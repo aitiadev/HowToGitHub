@@ -1,0 +1,114 @@
+github導入について
+
+
+- プランについて
+	LargePlan: 月50ドルで20個のプライベートリポジトリ
+	MediumPlan: 月25ドルで10個のプライベートリポジトリ
+	FreePlan: プライベートリポジトリ無し
+	
+	
+- Organizationの作成方法
+	Githubトップ画面の左上の自分のアカウント名をクリック
+	表示されるタブからグループを選択(追加する場合はCreate)
+	
+- Organization内での操作方法
+	右上の組織名のアイコンをクリックすることで組織の詳細を確認
+	メンバー招待はユーザ名を入力してadd
+	リポジトリの追加は右上の緑色のアイコン
+	
+
+[参考] 
+http://qiita.com/drapon/items/441e18452b25060d61f1
+
+
+
+
+
+- ssh接続の為の公開鍵の登録
+	$ ssh-keygen で公開鍵を作成
+	デフォルトでは"ssh_rsa"になるが、後で変更可能
+	/.ssh 以下に置く
+	公開鍵の"キー名"から"~MacBook-Pro.local"までをコピー
+	githubの設定アイコンから"SSHkeys"を選択
+	新規作成からキー名とコピーした暗号を貼り付けて作成
+
+
+
+- 最初に作業場所を指定してgithubと連携するまで
+	$ git init
+	$ git add .
+	$ git commit -m 'hoge'
+	---以下github関係
+	$ git remote add <short name> git@github.com:TomoyukiOhe/OF.git
+	// originという名でgithubのTomoyukiOhe/OF.gitに接続する
+	$ git push -u <short name> master
+	// -uをつけると、次回から<short name> masterを省略できる
+
+	------
+	以降
+	$ git add .
+	$ git commit -m 'hoge'
+	$ git push
+	のみでよい
+	
+	
+	
+	
+	＊originなどのShortNameについて＊
+	【参照】http://dqn.sakusakutto.jp/2011/10/git_push_origin_master.html
+	
+	---
+	$ git remote add origin git@github.com:~
+	$ git push -u origin master
+	---
+	
+	$ git remote add origin git@github.com:~
+	で使われている"origin"について
+	originはURLにつけられた短縮名である
+	慣習上originとつけいているだけで、hogeでもhugaでもよい
+	
+	$ git push -u origin master
+	で使われている
+	push = アップロードの命令
+	origin = リモートのサーバ名
+	master = デフォルトのブランチ名(作業の流れを分岐して記録するもの)
+	この一行の意味合いは、「ローカルのコードを、originというリモートサーバに対してアップロードせよ。指定するブランチはmasterである。」という意味である。
+	重要なのは、"origin"は、「サーバを表すただの短縮名」なので、代わりにリモートサーバのURLを書いても構わない。
+	---
+	git push git@github.com:~ master:master
+	---
+	master:masterは「ローカルのマスターをリモートのmasterに反映させる」という意味。
+	
+	
+
+
+
+- 鍵がデフォルトでない場合
+	http://qiita.com/tsumekoara/items/6c3e96c394bb0f753ea0
+
+	$ emacs config 
+
+	Host github.com
+    	HostName github.com
+    	User git
+    	PreferredAuthentications publickey
+    	IdentityFile ~/.ssh/github_aitiadev
+
+
+
+
+- android studioとの連携
+	【参考】
+	http://dev.classmethod.jp/smartphone/android/android-studio-git-integration/
+
+
+
+
+
+
+
+
+
+
+5/27更新
+＊Pull Requestとは通常、他人のリポジトリを自分のGitHubアカウントにコピー(Fork)してきて、変更を加え、それをもとのリポジトリに加えてもらうようにリクエストを送ることまた、上記に加え、コピー(Fork)せずに、同じリポジトリを共有して、その中だけで行うPullRequesutもある【リモート】・新規リポジトリの作成	- 今回はtestというタイトルで作成	- 現在testリポジトリ内にあるのはREADME.mdのみ	- リポジトリを作成した時点で、masterというブランチ(分岐)が作成【ローカル】・ローカルにクローン(コピー)する			$ git clone https://github.com/aitiadev/test.git	- cd test //作業ディレクトリをtestに移動	- この時点の作業ブランチはmaster・ローカルでリポジトリ内のファイルを編集…	・masterブランチに上書きする			- 編集したファイルをaddする				$ git add README.md			- コミットする(このときにmasterブランチに上書きされる)				$ commit -m "update-test"			・ブランチを分岐させる			- 新規にupdate-readmeブランチを作成する				$ git checkout -b update-readme			- 本来checkoutコマンドはブランチを切り替えるものだが、-bをオプションとして付けることで、新規ブランチを作成し、作業ブランチを切り替える			- あとはmasterにするのと同じ作業				$ git add README.md				$ git commit -m "update-test"			- ブランチが切り替わっているかの確認				$ git branch					  master					* update-readme					このように表示されていればOK					米印が現在の作業中のブランチ・リモートにPush(追加)する			$ git push origin update-readme			Username for 'https://github.com': 【自分のgitHubアカ名】			Password for 'https://TomoyukiOhe@github.com':【パス】【リモート】・Pull Requestを作成する	- GitHubの作業中のリポジトリの[Conpare & pull request]を選択	- リポジトリの管理者に変更点を説明する文を書く	- [Send Pull Request]を押す	- 以下の画像のようになっていれば完了
